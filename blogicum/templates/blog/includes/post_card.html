@@ -1,0 +1,44 @@
+{# Можно лучше: Предлагаем завести карточку поста, так как её код будет в 2 шаблонах #}
+<article>
+  <ul>
+    <li>
+      Место: {{ post.location }}
+    </li>
+    <li>
+      Дата: {{ post.date }}
+    </li>
+    <li>
+      Категория: <a
+        href="{% url 'blog:category_posts' post.category %}">{{ post.category }}</a>
+    </li>
+  </ul>
+  {# Первый вариант условия в карточке поста #}
+  {% with request.resolver_match.view_name as view_name %}
+    {% if view_name == 'blog:index' %}
+      <p>
+        {{ post.text|linebreaksbr|truncatewords:10 }}
+      </p>
+      <a href="{% url 'blog:post_detail' post.id %}">Читать полный текст</a>
+    {% else %}
+      asd
+      <!--  Надо исправить:
+      Если у нас будет несколько абзацев в посте, то они все сольются в один проблему решит
+      [клик](https://docs.djangoproject.com/en/2.2/ref/templates/builtins/#linebreaks)-->
+      <p>
+        {{ post.text|linebreaksbr }}
+      </p>
+    {% endif %}
+  {% endwith %}
+    <!-- Второй вариант условия в карточке поста, нужно передавать в подключении инклюда переменную, а тут её проверять.
+    {% if index == True %}
+      <p>
+        {{ post.text|linebreaksbr|truncatewords:10 }}
+      </p>
+      <a href="{% url 'blog:post_detail' post.id %}">Читать полный текст</a>
+    {% else %}
+      <p>
+        {{ post.text|linebreaksbr }}
+      </p>
+    {% endif %}
+    -->
+</article>

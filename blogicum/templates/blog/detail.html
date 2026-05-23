@@ -1,12 +1,17 @@
 {% extends "base.html" %}
-{% block title %}
- {{ post.title }} | {{ post.location.name }} | {{ post.pub_date|date:"d E Y" }}
-{% endblock %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
 {% block content %}
-  <article>
-    <p>{{ post.pub_date|date:"d E Y" }} | {% if post.location %}{{ post.location.name }}{% else %}Планета Земля{% endif %}<br>
-      <small>От автора @{{ post.author.username }} в категории {% include "includes/category_link.html" %}</small></p>
-    <h3>{{ post.title }}</h3>
-    <p>{{ post.text|linebreaksbr }}</p>
-  </article> 
+<article>
+  <h1>{{ post.title }}</h1>
+  <ul>
+    <li>Место: {{ post.location.name|default:"Планета Земля" }}</li>
+    <li>Дата: {{ post.pub_date }}</li>
+    <li>Категория: <a href="{% url 'blog:category_posts' post.category.slug %}">{{ post.category.title }}</a></li>
+    <li>Автор: {{ post.author.get_full_name|default:post.author.username }}</li>
+  </ul>
+  <p>{{ post.text|linebreaksbr }}</p>
+</article>
+<a href="{% url 'blog:index' %}">← Назад к ленте</a>
 {% endblock %}
